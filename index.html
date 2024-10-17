@@ -7,40 +7,20 @@
     <title>Калькулятор трансфера</title>
     <style>
         .form-group {
-            margin-bottom: 15px;
-        }
-
-        select,
-        input[type="button"] {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
+            display: flex;
         }
 
         .step {
             display: none;
         }
 
-        .active {
+        .step.active {
             display: block;
         }
 
-        .car-options {
-            display: flex;
-            gap: 15px;
-        }
-
-        .car-card {
-            border: 1px solid #ccc;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            width: 150px;
-            cursor: pointer;
-        }
-
-        .car-card:hover {
-            background-color: #f0f0f0;
+        #map {
+            width: 100%;
+            height: 400px;
         }
     </style>
     <script src="https://api-maps.yandex.ru/2.1/?apikey=9440bea9-20b9-41fc-8aed-6846cecae179&lang=ru_RU"
@@ -49,143 +29,265 @@
 
 <body>
 
-    <!-- Шаг 1: Выбор направления -->
-    <div class="step active" id="step1">
-        <div class="form-group">
-            <label for="departure">Откуда:</label>
-            <select id="departure">
-                <option value="" disabled selected>Выберите пункт отправления</option>
-                <option value="Москва">Москва</option>
-                <option value="Санкт-Петербург">Санкт-Петербург</option>
-                <option value="Казань">Казань</option>
-                <option value="Сочи">Сочи</option>
-            </select>
+    <form id="transferForm">
+        <div class="step active" id="step1">
+            <div class="form-group">
+                <div class="form-group-item">
+                    <label for="departure">Откуда:</label>
+                    <input type="text" id="departure" required placeholder="Введите пункт отправления">
+                    <div id="departure-suggestions" class="suggestions"></div>
+                    <ul id="cities-list" style="display: none;">
+                        <li>Сочи</li>
+                        <li>Минеральные воды</li>
+                        <li>Новороссийск</li>
+                    </ul>
+                </div>
+                <div class="form-group-item">
+                    <label for="destination">Куда:</label>
+                    <input type="text" id="destination" required placeholder="Введите пункт назначения">
+                    <div id="destination-suggestions" class="suggestions"></div>
+                    <ul id="cities-list-destination" style="display: none;">
+                        <li>Авило-Успенка</li>
+                        <li>Адлер</li>
+                        <li>Азов</li>
+                        <li>Анапа</li>
+                        <li>Анапа жд вокзал</li>
+                        <li>Анапская</li>
+                        <li>Анастасиевская</li>
+                        <li>Батайск</li>
+                        <li>Белореченск</li>
+                        <li>Бетта</li>
+                        <li>Благовещенская</li>
+                        <li>Варениковская</li>
+                        <li>Волгодонск</li>
+                        <li>Геленджик</li>
+                        <li>Дивноморское</li>
+                        <li>Домодедово</li>
+                        <li>Ейск</li>
+                        <li>Каневская</li>
+                        <li>Краснодар</li>
+                        <li>Крымск</li>
+                        <li>Майкоп</li>
+                        <li>Минеральные Воды</li>
+                        <li>Минеральные Воды аэропорт</li>
+                        <li>Новороссийск</li>
+                        <li>Новотитвровская</li>
+                        <li>Павловская</li>
+                        <li>Порт Кавказ</li>
+                        <li>Ростов</li>
+                        <li>Севастополь</li>
+                        <li>Симферополь</li>
+                        <li>Славянск-на-Кубани</li>
+                        <li>Сочи</li>
+                        <li>Сочи аэропорт</li>
+                        <li>Ставрополь</li>
+                        <li>Старотитаровская</li>
+                        <li>Таганрог</li>
+                        <li>Тамань</li>
+                        <li>Темрюк</li>
+                        <li>Тимашевск</li>
+                        <li>Тихорецк</li>
+                        <li>Туапсе</li>
+                        <li>Туапсе жд вокзал</li>
+                        <li>Феодосия</li>
+                        <li>Шахты</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="form-group-item">
+                    <label for="start">Дата поездки:</label>
+                    <input type="date" id="start" name="trip-start" required />
+                </div>
+                <div class="form-group-item">
+                    <input type="button" value="Далее" id="toStep2">
+                </div>
+            </div>
         </div>
 
-        <div class="form-group">
-            <label for="destination">Куда:</label>
-            <select id="destination">
-                <option value="" disabled selected>Выберите пункт назначения</option>
-                <option value="Москва">Москва</option>
-                <option value="Санкт-Петербург">Санкт-Петербург</option>
-                <option value="Казань">Казань</option>
-                <option value="Сочи">Сочи</option>
-            </select>
+        <div class="step" id="step2">
+            <div id="car-options">
+                <div class="car-option" data-name="Комфорт" data-price-per-km="30">
+                    <div class="car-option-image">
+                        <img src="/img/tclass/1234567890_0120013932.jpg" alt="">
+                    </div>
+                    <div class="car-option-info">
+                        <div class="car-option-title">Комфорт (до 4 человек)</div>
+                        <div class="car-option-brands">
+                            Toyota Avensis, Kia Cerato, Skoda Octavia, Geely Emgrand, BAIC U5, Hyundai Elantra</div>
+                        <div class="car-option-size">
+                            <div><span class="icon_people"></span>до 4 человек</div>
+                            <div><span class="icon_cases"></span>до 3 чемоданов</div>
+                        </div>
+                    </div>
+                    <div class="car-option-order">
+                        <div class="car-option-order-price"><span>0</span> ₽</div>
+                        <input type="button" value="Заказать трансфер" class="toStep3" data-name="Комфорт"
+                            data-price-per-km="30">
+                    </div>
+                </div>
+                <div class="car-option" data-name="Микроавтобус" data-price-per-km="50">
+                    <div class="car-option-image">
+                        <img src="/img/tclass/1234567890_0120013932.jpg" alt="">
+                    </div>
+                    <div class="car-option-info">
+                        <div class="car-option-title">Микроавтобус (до 7 человек)</div>
+                        <div class="car-option-brands">
+                            Hyundai Grand Starex, Volkswagen Caravelle, Kia Carnival, Ford Torneo, Hyundai Staria,
+                            Nissan Elgrand</div>
+                        <div class="car-option-size">
+                            <div><span class="icon_people"></span>до 7 человек</div>
+                            <div><span class="icon_cases"></span>до 7 чемоданов</div>
+                        </div>
+                    </div>
+                    <div class="car-option-order">
+                        <div class="car-option-order-price"><span>0</span> ₽</div>
+                        <input type="button" value="Заказать трансфер" class="toStep3" data-name="Микроавтобус"
+                            data-price-per-km="50">
+                    </div>
+                </div>
+                <div class="car-option" data-name="Бизнес" data-price-per-km="60">
+                    <div class="car-option-image">
+                        <img src="/img/tclass/1234567890_0120013932.jpg" alt="">
+                    </div>
+                    <div class="car-option-info">
+                        <div class="car-option-title">Стандарт (до 4 человек)</div>
+                        <div class="car-option-brands">
+                            Toyota Camry, Hyundai Sonata, Kia K5, Genesis G70, FAW Bestune B70, Chery Arrizo 8</div>
+                        <div class="car-option-size">
+                            <div><span class="icon_people"></span>до 4 человек</div>
+                            <div><span class="icon_cases"></span>до 3 чемоданов</div>
+                        </div>
+                    </div>
+                    <div class="car-option-order">
+                        <div class="car-option-order-price"><span>0</span> ₽</div>
+                        <input type="button" value="Заказать трансфер" class="toStep3" data-name="Бизнес"
+                            data-price-per-km="60">
+                    </div>
+                </div>
+            </div>
+            <div id="map"></div>
         </div>
 
-        <div class="form-group">
-            <input type="button" value="Далее" id="toStep2">
+        <div class="step" id="step3">
+            some personal data
         </div>
-    </div>
-
-    <!-- Шаг 2: Выбор класса авто + маршрут -->
-    <div class="step" id="step2">
-        <div id="map" style="width: 100%; height: 400px;"></div>
-
-        <div class="car-options">
-            <!-- Карточки с автомобилями будут добавляться здесь -->
-        </div>
-    </div>
+    </form>
 
     <script>
+        const transferForm = document.querySelector('#transferForm');
         const step1 = document.getElementById('step1');
         const step2 = document.getElementById('step2');
         const toStep2Button = document.getElementById('toStep2');
-        const carOptionsContainer = document.querySelector('.car-options');
+        const toStep3Button = document.querySelectorAll('.toStep3');
+        // const carOptionsContainer = document.querySelector('.car-options');
 
-        let departure, destination;
+        let routeFields = {
+            date: null, departure: null, destination: null, distance: null, totalPrice: null, carClass: null, rate: null
+        }
 
         toStep2Button.addEventListener('click', function () {
-            departure = document.getElementById('departure').value;
-            destination = document.getElementById('destination').value;
+            routeFields.date = document.getElementById('start').value;
+            routeFields.departure = document.getElementById('departure').value;
+            routeFields.destination = document.getElementById('destination').value;
 
-            if (!departure || !destination) {
+            if (!routeFields.departure || !routeFields.destination) {
                 alert('Пожалуйста, выберите пункты отправления и назначения.');
                 return;
             }
+            if (!routeFields.date) {
+                alert('Пожалуйста, выберите дату');
+                return;
+            }
 
-            step1.classList.remove('active');
             step2.classList.add('active');
+            step2.scrollIntoView();
 
             // Инициализация карты
             ymaps.ready(init);
+        });
 
-            // Отображение карточек с автомобилями
-            renderCarOptions();
+        toStep3Button.forEach(btn => {
+            btn.addEventListener('click', function () {
+                routeFields.carClass = this.getAttribute('data-name');
+                routeFields.totalPrice = Math.round((routeFields.distance * this.getAttribute('data-price-per-km')) / 10) * 10;
+                routeFields.rate = this.getAttribute('data-price-per-km');
+                step1.classList.remove('active');
+                step2.classList.remove('active');
+                step3.classList.add('active');
+                console.log(routeFields);
+            })
         });
 
         function init() {
             const map = new ymaps.Map("map", {
-                center: [55.751574, 37.573856], // Центр карты по умолчанию (Москва)
+                center: [44.723771, 37.768813], // Центр карты по умолчанию (Новороссийск)
                 zoom: 7
             });
 
-            // function getCoordinates(place) {
-            //     ymaps.geocode(place, { results: 1 }).then(function (res) {
-            //         var firstGeoObject = res.geoObjects.get(0),
-            //         coords = firstGeoObject.geometry.getCoordinates();
-            //         return coords;
-            //     });
-            // }
+            ymaps.route([routeFields.departure, routeFields.destination]).then(function (route) {
+                const from = route.requestPoints[0];
+                const to = route.requestPoints[1];
 
-            // console.log(getCoordinates(departure));
-
-            console.log([departure, destination]);
-
-            // ymaps.geocode(departure, {
-            //     results: 1
-            // }).then(function (res) {
-            //     var firstGeoObject = res.geoObjects.get(0),
-            //         coords = firstGeoObject.geometry.getCoordinates();
-            //     console.log(coords);
-            // });
-
-            // ymaps.geocode(destination, {
-            //     results: 1
-            // }).then(function (res) {
-            //     var firstGeoObject = res.geoObjects.get(0),
-            //         coords = firstGeoObject.geometry.getCoordinates();
-            //     console.log(coords);
-            // });
-
-
-            ymaps.route([departure, destination]).then(function (route) {
                 map.geoObjects.add(route);
-                // console.log(Math.round(route.getLength() / 1000));
-                // TODO передать в getBounds() координаты обеих точек
-                map.setBounds(route.getBounds());
 
-                // Получение расстояния маршрута и вывод в консоль
-                const distance = route.getLength(); // Расстояние в метрах
-                console.log(distance);
-                console.log(`Расстояние маршрута: ${(distance / 1000).toFixed(2)} км`); // Вывод в км с двумя знаками после запятой
+                routeFields.distance = (route.getLength() / 1000).toFixed(0); // Расстояние маршрута в км
+
+                const carOptions = document.querySelectorAll('#car-options .car-option');
+
+                carOptions.forEach(car => {
+                    // Расчет стоимости поездки в рублях с округлением до 10 рублей
+                    totalPrice = Math.round((routeFields.distance * car.getAttribute('data-price-per-km')) / 10) * 10;
+                    car.querySelector('.car-option-order-price span').innerHTML = totalPrice;
+
+                    //     console.log(`
+                    //     <h3>${car.getAttribute('data-name')}</h3>
+                    //     <p>Стоимость поездки: ${totalPrice} руб.</p>
+                    // `);
+                });
             }, function (error) {
                 alert('Не удалось построить маршрут');
             });
         }
 
+        // Функция для отображения подсказок
+        function showSuggestions(input, suggestionsContainer, citiesList) {
+            const inputValue = input.value.toLowerCase();
+            suggestionsContainer.innerHTML = ''; // Очищаем предыдущие подсказки
 
-        function renderCarOptions() {
-            const carOptions = [
-                { name: 'Эконом', pricePerKm: 10, image: 'economy.png' },
-                { name: 'Комфорт', pricePerKm: 15, image: 'comfort.png' },
-                { name: 'Бизнес', pricePerKm: 20, image: 'business.png' }
-            ];
-
-            carOptions.forEach(car => {
-                const carCard = document.createElement('div');
-                carCard.classList.add('car-card');
-                carCard.innerHTML = `
-          <h3>${car.name}</h3>
-          <p>Цена за км: ${car.pricePerKm} руб.</p>
-        `;
-                carCard.addEventListener('click', function () {
-                    // Логика отправки данных (выбранный автомобиль, расчет и т.д.)
-                    alert(`Вы выбрали: ${car.name}`);
+            if (inputValue) {
+                citiesList.forEach(city => {
+                    if (city.textContent.toLowerCase().includes(inputValue)) {
+                        const suggestionItem = document.createElement('div');
+                        suggestionItem.classList.add('suggestion-item');
+                        suggestionItem.textContent = city.textContent;
+                        suggestionItem.addEventListener('click', () => {
+                            input.value = city.textContent;
+                            suggestionsContainer.innerHTML = ''; // Очищаем подсказки после выбора
+                        });
+                        suggestionsContainer.appendChild(suggestionItem);
+                    }
                 });
-                carOptionsContainer.appendChild(carCard);
-            });
+            }
         }
+
+        // Привязываем события ввода к полям
+        document.getElementById('departure').addEventListener('input', function () {
+            showSuggestions(this, document.getElementById('departure-suggestions'),
+                document.querySelectorAll('#cities-list li')
+            );
+        });
+
+        document.getElementById('destination').addEventListener('input', function () {
+            showSuggestions(this, document.getElementById('destination-suggestions'),
+                document.querySelectorAll('#cities-list-destination li')
+            );
+        });
+
+        // transferForm.addEventListener('submit', ()=> {
+        //     console.log(new FormData(this));
+        // })
     </script>
 
 </body>
