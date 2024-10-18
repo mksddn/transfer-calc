@@ -6,21 +6,125 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Калькулятор трансфера</title>
     <style>
-        .form-group {
-            display: flex;
-        }
+        #transferForm {
+            .form-group {
+                display: flex;
+                gap: 2rem;
+                align-items: flex-end;
+                margin-bottom: 2rem;
 
-        .step {
-            display: none;
-        }
+                @media(max-width: 992px) {
+                    flex-wrap: wrap;
+                }
+            }
 
-        .step.active {
-            display: block;
-        }
+            .form-group-item {
+                max-width: 100%;
+                width: 100%;
+            }
 
-        #map {
-            width: 100%;
-            height: 400px;
+            input {
+                letter-spacing: normal !important;
+                padding-left: .5rem !important;
+            }
+
+            button,
+            input[type=button] {
+                background-color: #34ccff;
+                cursor: pointer;
+                border: none !important;
+                padding: .5rem 2rem !important;
+            }
+
+            button:hover,
+            input[type=button]:hover {
+                background-color: #00bfff;
+            }
+
+            #destination-suggestions,
+            #departure-suggestions {
+                background-color: #dadada;
+                position: absolute;
+                overflow: scroll;
+                max-height: 200px;
+                min-width: 300px;
+                position: absolute;
+            }
+
+            .suggestion-item {
+                cursor: pointer;
+                padding: .5rem 1rem;
+            }
+
+            .suggestion-item:hover {
+                background-color: #34ccff;
+            }
+
+            .step {
+                display: none;
+            }
+
+            .step.active {
+                display: block;
+            }
+
+            #step1 {
+                border: 1px solid #666;
+                margin-bottom: 2rem;
+                padding: 1rem;
+            }
+
+            .car-option {
+                display: flex;
+                gap: 1rem;
+                border: 1px solid #666;
+                margin-bottom: 2rem;
+                padding: 1rem;
+                justify-content: space-between;
+                align-items: flex-end;
+                flex-wrap: wrap;
+            }
+
+            .car-option-image {
+                width: 200px;
+
+                img {
+                    width: 200px;
+                }
+            }
+
+            .car-option-info {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+                max-width: 600px;
+            }
+
+            .car-option-title {
+                font-size: 1.5rem;
+            }
+
+            .car-option-size {
+                display: flex;
+                gap: 1rem;
+                font-size: 0.8rem;
+            }
+
+            .car-option-order-price {
+                font-weight: bold;
+                margin-bottom: 1rem;
+                font-size: 1.5rem;
+            }
+
+            #map {
+                width: 100%;
+                height: 400px;
+            }
+
+            #backToStart {
+                display: block;
+                cursor: pointer;
+            }
         }
     </style>
     <script src="https://api-maps.yandex.ru/2.1/?apikey=9440bea9-20b9-41fc-8aed-6846cecae179&lang=ru_RU"
@@ -98,10 +202,10 @@
             <div class="form-group">
                 <div class="form-group-item">
                     <label for="start">Дата поездки:</label>
-                    <input type="date" id="start" name="trip-start" required />
+                    <input type="date" id="start" name="trip-start" value="2000-01-01" required />
                 </div>
                 <div class="form-group-item">
-                    <input type="button" value="Далее" id="toStep2">
+                    <input type="button" value="Найти" id="toStep2">
                 </div>
             </div>
         </div>
@@ -110,7 +214,7 @@
             <div id="car-options">
                 <div class="car-option" data-name="Комфорт" data-price-per-km="30">
                     <div class="car-option-image">
-                        <img src="/img/tclass/1234567890_0120013932.jpg" alt="">
+                        <img src="komfort.png" alt="komfort">
                     </div>
                     <div class="car-option-info">
                         <div class="car-option-title">Комфорт (до 4 человек)</div>
@@ -122,14 +226,15 @@
                         </div>
                     </div>
                     <div class="car-option-order">
-                        <div class="car-option-order-price"><span>0</span> ₽</div>
+                        <div class="car-option-order-price"><span>0</span> руб.</div>
                         <input type="button" value="Заказать трансфер" class="toStep3" data-name="Комфорт"
                             data-price-per-km="30">
                     </div>
                 </div>
                 <div class="car-option" data-name="Микроавтобус" data-price-per-km="50">
                     <div class="car-option-image">
-                        <img src="/img/tclass/1234567890_0120013932.jpg" alt="">
+                        <img src="mikroavtobus.png"
+                            alt="mikroavtobus">
                     </div>
                     <div class="car-option-info">
                         <div class="car-option-title">Микроавтобус (до 7 человек)</div>
@@ -142,17 +247,17 @@
                         </div>
                     </div>
                     <div class="car-option-order">
-                        <div class="car-option-order-price"><span>0</span> ₽</div>
+                        <div class="car-option-order-price"><span>0</span> руб.</div>
                         <input type="button" value="Заказать трансфер" class="toStep3" data-name="Микроавтобус"
                             data-price-per-km="50">
                     </div>
                 </div>
                 <div class="car-option" data-name="Бизнес" data-price-per-km="60">
                     <div class="car-option-image">
-                        <img src="/img/tclass/1234567890_0120013932.jpg" alt="">
+                        <img src="biznes.png" alt="biznes">
                     </div>
                     <div class="car-option-info">
-                        <div class="car-option-title">Стандарт (до 4 человек)</div>
+                        <div class="car-option-title">Бизнес (до 4 человек)</div>
                         <div class="car-option-brands">
                             Toyota Camry, Hyundai Sonata, Kia K5, Genesis G70, FAW Bestune B70, Chery Arrizo 8</div>
                         <div class="car-option-size">
@@ -161,7 +266,7 @@
                         </div>
                     </div>
                     <div class="car-option-order">
-                        <div class="car-option-order-price"><span>0</span> ₽</div>
+                        <div class="car-option-order-price"><span>0</span> руб.</div>
                         <input type="button" value="Заказать трансфер" class="toStep3" data-name="Бизнес"
                             data-price-per-km="60">
                     </div>
@@ -171,7 +276,10 @@
         </div>
 
         <div class="step" id="step3">
-            some personal data
+            <div id="step3content">
+                some personal data
+            </div>
+            <span id="backToStart">🔙 Вернуться к настройкам поездки</span>
         </div>
     </form>
 
@@ -181,10 +289,17 @@
         const step2 = document.getElementById('step2');
         const toStep2Button = document.getElementById('toStep2');
         const toStep3Button = document.querySelectorAll('.toStep3');
+        const backToStart = document.getElementById('backToStart');
         // const carOptionsContainer = document.querySelector('.car-options');
 
         let routeFields = {
-            date: null, departure: null, destination: null, distance: null, totalPrice: null, carClass: null, rate: null
+            date: null,
+            departure: null,
+            destination: null,
+            distance: null,
+            totalPrice: null,
+            carClass: null,
+            rate: null
         }
 
         toStep2Button.addEventListener('click', function () {
@@ -202,7 +317,10 @@
             }
 
             step2.classList.add('active');
-            step2.scrollIntoView();
+            document.getElementById('map').innerHTML = '';
+            document.getElementById('departure-suggestions').innerHTML = '';
+            document.getElementById('destination-suggestions').innerHTML = '';
+            // step2.scrollIntoView();
 
             // Инициализация карты
             ymaps.ready(init);
@@ -217,6 +335,7 @@
                 step2.classList.remove('active');
                 step3.classList.add('active');
                 console.log(routeFields);
+                document.querySelector('#step3content').innerHTML = `<code>${JSON.stringify(routeFields)}</code>`;
             })
         });
 
@@ -240,16 +359,17 @@
                     // Расчет стоимости поездки в рублях с округлением до 10 рублей
                     totalPrice = Math.round((routeFields.distance * car.getAttribute('data-price-per-km')) / 10) * 10;
                     car.querySelector('.car-option-order-price span').innerHTML = totalPrice;
-
-                    //     console.log(`
-                    //     <h3>${car.getAttribute('data-name')}</h3>
-                    //     <p>Стоимость поездки: ${totalPrice} руб.</p>
-                    // `);
                 });
             }, function (error) {
                 alert('Не удалось построить маршрут');
             });
         }
+
+        backToStart.addEventListener('click', function () {
+            step1.classList.add('active');
+            step2.classList.add('active');
+            step3.classList.remove('active');
+        });
 
         // Функция для отображения подсказок
         function showSuggestions(input, suggestionsContainer, citiesList) {
