@@ -23,9 +23,13 @@
                 width: 100%;
             }
 
+            label {
+                font-size: 1rem;
+                opacity: 0.8;
+            }
+
             input {
                 letter-spacing: normal !important;
-                padding-left: .5rem !important;
             }
 
             button,
@@ -104,6 +108,10 @@
                 font-size: 1.5rem;
             }
 
+            .car-option-brands {
+                font-size: 1.1rem;
+            }
+
             .car-option-size {
                 display: flex;
                 gap: 1rem;
@@ -119,6 +127,10 @@
             #map {
                 width: 100%;
                 height: 400px;
+
+                input {
+                    all: unset;
+                }
             }
 
             #backToStart {
@@ -226,6 +238,7 @@
                         </div>
                     </div>
                     <div class="car-option-order">
+                        <small class="car-option-order-points"></small>
                         <div class="car-option-order-price"><span>0</span> руб.</div>
                         <input type="button" value="Заказать трансфер" class="toStep3" data-name="Комфорт"
                             data-price-per-km="30">
@@ -247,6 +260,7 @@
                         </div>
                     </div>
                     <div class="car-option-order">
+                        <small class="car-option-order-points"></small>
                         <div class="car-option-order-price"><span>0</span> руб.</div>
                         <input type="button" value="Заказать трансфер" class="toStep3" data-name="Микроавтобус"
                             data-price-per-km="50">
@@ -266,6 +280,7 @@
                         </div>
                     </div>
                     <div class="car-option-order">
+                        <small class="car-option-order-points"></small>
                         <div class="car-option-order-price"><span>0</span> руб.</div>
                         <input type="button" value="Заказать трансфер" class="toStep3" data-name="Бизнес"
                             data-price-per-km="60">
@@ -342,7 +357,8 @@
         function init() {
             const map = new ymaps.Map("map", {
                 center: [44.723771, 37.768813], // Центр карты по умолчанию (Новороссийск)
-                zoom: 7
+                zoom: 7,
+                controls: ['typeSelector', 'fullscreenControl', 'zoomControl']
             });
 
             ymaps.route([routeFields.departure, routeFields.destination]).then(function (route) {
@@ -359,6 +375,7 @@
                     // Расчет стоимости поездки в рублях с округлением до 10 рублей
                     totalPrice = Math.round((routeFields.distance * car.getAttribute('data-price-per-km')) / 10) * 10;
                     car.querySelector('.car-option-order-price span').innerHTML = totalPrice;
+                    car.querySelector('.car-option-order-points').innerHTML = `${routeFields.departure} → ${routeFields.destination}`;
                 });
             }, function (error) {
                 alert('Не удалось построить маршрут');
