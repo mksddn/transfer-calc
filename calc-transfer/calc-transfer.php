@@ -120,6 +120,13 @@
     flex-wrap: wrap;
   }
 
+  #transferForm .car-option-wrapper {
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
   #transferForm .car-option-image {
     width: 200px;
   }
@@ -153,6 +160,11 @@
     font-weight: bold;
     margin-bottom: 1rem;
     font-size: 1.5rem;
+  }
+
+  #transferForm .loader {
+    width: 30px;
+    margin-bottom: -7px;
   }
 
   #transferForm #map {
@@ -213,6 +225,7 @@
   #transferForm #backToStart {
     display: block;
     cursor: pointer;
+    margin-top: 2rem;
   }
 </style>
 <script src="https://api-maps.yandex.ru/2.1/?apikey=9440bea9-20b9-41fc-8aed-6846cecae179&lang=ru_RU"
@@ -292,7 +305,7 @@
     <div class="form-group">
       <div class="form-group-item">
         <label for="start">Дата поездки:</label>
-        <input type="date" id="start" name="Дата поездки" value="2000-01-01" required />
+        <input type="date" id="start" name="Дата поездки" value="" required />
       </div>
       <div class="form-group-item">
         <input type="button" value="Найти" id="toStep2">
@@ -302,65 +315,73 @@
 
   <div class="step" id="step2">
     <div id="car-options">
-      <div class="car-option" data-name="Комфорт" data-price-per-km="30">
-        <div class="car-option-image">
-          <img src="<?php echo get_template_directory_uri(); ?>/calc-transfer/komfort.png" alt="komfort">
-        </div>
-        <div class="car-option-info">
-          <div class="car-option-title">Комфорт (до 4 человек)</div>
-          <div class="car-option-brands">
-            Toyota Avensis, Kia Cerato, Skoda Octavia, Geely Emgrand, BAIC U5, Hyundai Elantra</div>
-          <div class="car-option-size">
-            <div><span class="icon_people"></span>до 4 человек</div>
-            <div><span class="icon_cases"></span>до 3 чемоданов</div>
+      <div class="car-option" data-name="Комфорт" data-price-per-km="42">
+        <div class="car-option-wrapper">
+          <div class="car-option-image">
+            <img src="<?php echo get_template_directory_uri(); ?>/komfort.png" alt="komfort">
+          </div>
+          <div class="car-option-info">
+            <div class="car-option-title">Комфорт (до 3 человек)</div>
+            <div class="car-option-brands">
+              Hyundai Solaris, Kia Rio, Kia Cerato, Skoda Octavia, Chery Tiggo</div>
+            <div class="car-option-size">
+              <div><span class="icon_people"></span>до 3 человек</div>
+            </div>
           </div>
         </div>
         <div class="car-option-order">
           <small class="car-option-order-points"></small>
-          <div class="car-option-order-price"><span>0</span> руб.</div>
+          <div class="car-option-order-price"><span>
+              <img src="<?php echo get_template_directory_uri(); ?>/load.gif" class="loader" alt="loader">
+            </span> руб.</div>
           <input type="button" value="Заказать трансфер" class="toStep3" data-name="Комфорт"
-            data-price-per-km="30">
+            data-price-per-km="42">
         </div>
       </div>
-      <div class="car-option" data-name="Микроавтобус" data-price-per-km="50">
-        <div class="car-option-image">
-          <img src="<?php echo get_template_directory_uri(); ?>/calc-transfer/mikroavtobus.png" alt="mikroavtobus">
-        </div>
-        <div class="car-option-info">
-          <div class="car-option-title">Микроавтобус (до 7 человек)</div>
-          <div class="car-option-brands">
-            Hyundai Grand Starex, Volkswagen Caravelle, Kia Carnival, Ford Torneo, Hyundai Staria,
-            Nissan Elgrand</div>
-          <div class="car-option-size">
-            <div><span class="icon_people"></span>до 7 человек</div>
-            <div><span class="icon_cases"></span>до 7 чемоданов</div>
+      <div class="car-option" data-name="Микроавтобус" data-price-per-km="64">
+        <div class="car-option-wrapper">
+          <div class="car-option-image">
+            <img src="<?php echo get_template_directory_uri(); ?>/mikroavtobus.png" alt="mikroavtobus">
+          </div>
+          <div class="car-option-info">
+            <div class="car-option-title">Микроавтобус (до 7 человек)</div>
+            <div class="car-option-brands">
+              Hyundai H1, Hyundai Grand Starex, Volkswagen Caravelle, Kia Carnival, Ford Tourneo Custom</div>
+            <div class="car-option-size">
+              <div><span class="icon_people"></span>до 7 человек</div>
+            </div>
           </div>
         </div>
         <div class="car-option-order">
           <small class="car-option-order-points"></small>
-          <div class="car-option-order-price"><span>0</span> руб.</div>
+          <div class="car-option-order-price"><span>
+              <img src="<?php echo get_template_directory_uri(); ?>/load.gif" class="loader" alt="loader">
+            </span> руб.</div>
           <input type="button" value="Заказать трансфер" class="toStep3" data-name="Микроавтобус"
-            data-price-per-km="50">
+            data-price-per-km="64">
         </div>
       </div>
-      <div class="car-option" data-name="Бизнес" data-price-per-km="60">
-        <div class="car-option-image">
-          <img src="<?php echo get_template_directory_uri(); ?>/calc-transfer/biznes.png" alt="biznes">
-        </div>
-        <div class="car-option-info">
-          <div class="car-option-title">Бизнес (до 4 человек)</div>
-          <div class="car-option-brands">
-            Toyota Camry, Hyundai Sonata, Kia K5, Genesis G70, FAW Bestune B70, Chery Arrizo 8</div>
-          <div class="car-option-size">
-            <div><span class="icon_people"></span>до 4 человек</div>
-            <div><span class="icon_cases"></span>до 3 чемоданов</div>
+      <div class="car-option" data-name="Бизнес" data-price-per-km="84">
+        <div class="car-option-wrapper">
+          <div class="car-option-image">
+            <img src="<?php echo get_template_directory_uri(); ?>/biznes.png" alt="biznes">
+          </div>
+          <div class="car-option-info">
+            <div class="car-option-title">Бизнес (до 3 человек)</div>
+            <div class="car-option-brands">
+              Mercedes E-class, Toyota Camry</div>
+            <div class="car-option-size">
+              <div><span class="icon_people"></span>до 3 человек</div>
+            </div>
           </div>
         </div>
         <div class="car-option-order">
           <small class="car-option-order-points"></small>
-          <div class="car-option-order-price"><span>0</span> руб.</div>
+          <div class="car-option-order-price"><span>
+              <img src="<?php echo get_template_directory_uri(); ?>/load.gif" class="loader" alt="loader">
+            </span> руб.</div>
           <input type="button" value="Заказать трансфер" class="toStep3" data-name="Бизнес"
-            data-price-per-km="60">
+            data-price-per-km="84">
         </div>
       </div>
     </div>
@@ -461,7 +482,7 @@
             <legend class="label">Выберите метод оплаты</legend>
             <label>
               <input type="radio" name="Метод оплаты" id="payCard" class="radioBox" value="Оплата картой или рассрочка">
-              Оплата картой или рассрочка
+              Оплата картой
             </label>
             <label>
               <input type="radio" name="Метод оплаты" id="payCash" class="radioBox" value="Оплата наличными водителю">
@@ -474,13 +495,13 @@
           <div class="form-group-item">
             <label>
               <input name="Согласие с правилами" id="isAgree" type="checkbox" class="checkBox" required value="Да">
-              Я подтверждаю, что прочитал и согласен с <a href="#0">Пользовательским соглашением</a> и <a href="#0">политикой конфиденциальности</a>
+              Я подтверждаю, что прочитал и согласен с <a href="/user-agreement/" target="_blank">Пользовательским соглашением</a> и <a href="/privacy-policy/" target="_blank">политикой конфиденциальности</a>
             </label>
           </div>
         </div>
         <div class="form-group">
           <div class="form-group-item">
-            <input type="submit" value="Заказать трансфер">
+          <input type="submit" id="TBankButton" value="Заказать трансфер">
           </div>
         </div>
       </div>
@@ -489,11 +510,11 @@
           <div id="orderClass"><b>Класса авто:</b> <span></span></div>
           <div id="orderRoute"><b>Маршрут:</b> <span></span></div>
           <div id="orderRouteTime"><b>Ориентировочное время в пути:</b> <span></span></div>
-          <div id="orderPrice"><b>Стоимость поездки:</b> <span>0</span> руб.</div>
+          <div id="orderPrice"><b>Стоимость поездки:</b> <span></span> руб.</div>
       </div>
     </div>
+    <span id="backToStart">← Вернуться назад</span>
   </div>
-  <span id="backToStart">← Вернуться назад</span>
 </form>
 
 <script>
@@ -503,6 +524,14 @@
   const toStep2Button = document.getElementById('toStep2');
   const toStep3Button = document.querySelectorAll('.toStep3');
   const backToStart = document.getElementById('backToStart');
+
+  const dateInput = document.getElementById('start');
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1); // Устанавливаем завтрашнюю дату
+  const year = tomorrow.getFullYear();
+  const month = String(tomorrow.getMonth() + 1).padStart(2, '0'); // Месяцы начинаются с 0, поэтому добавляем 1
+  const day = String(tomorrow.getDate()).padStart(2, '0');
+  dateInput.value = `${year}-${month}-${day}`; // Форматируем как YYYY-MM-DD
 
   let routeFields = {
     date: null,
@@ -545,21 +574,36 @@
   toStep3Button.forEach(btn => {
     btn.addEventListener('click', function() {
       routeFields.carClass = this.getAttribute('data-name');
-      routeFields.totalPrice = Math.round((routeFields.distance * this.getAttribute('data-price-per-km')) / 10) * 10;
+      routeFields.totalPrice = Math.round((routeFields.distance * this.getAttribute('data-price-per-km')) / 500) * 500;
+      routeFields.totalPrice == 0 ? routeFields.totalPrice = 500 : routeFields.totalPrice = routeFields.totalPrice;
       routeFields.rate = this.getAttribute('data-price-per-km');
       step1.classList.remove('active');
       step2.classList.remove('active');
       step3.classList.add('active');
-      console.log(routeFields);
-      // document.querySelector('#step3content').innerHTML = `<code>${JSON.stringify(routeFields)}</code>`;
       document.querySelector('#step3title span').innerHTML = `${routeFields.departure} - ${routeFields.destination}`;
       document.querySelector('#orderClass span').innerHTML = `${routeFields.carClass}`;
       document.querySelector('#orderRoute span').innerHTML = `${routeFields.departure} → ${routeFields.destination}`;
       document.querySelector('#orderRouteTime span').innerHTML = `${Math.round(routeFields.distance / 10) * 10} минут`;
       document.querySelector('#orderPrice span').innerHTML = `${routeFields.totalPrice}`;
       document.querySelector('#orderFormPrice span').innerHTML = `${routeFields.totalPrice}`;
-    })
+     })
   });
+
+  let payWay = null;
+  document.querySelectorAll('input[name="Метод оплаты"]').forEach(option => {
+    option.addEventListener('change', updateButtonValue);
+  });
+
+  function updateButtonValue(event) {
+    payWay = event.target.id;
+    console.log(payWay);
+    if (payWay === 'payCard') {
+      document.querySelector('#TBankButton').value = 'Оплатить';
+    } else {
+      document.querySelector('#TBankButton').value = 'Заказать трансфер';
+    }
+  }
+
 
   function init() {
     const map = new ymaps.Map("map", {
@@ -579,8 +623,9 @@
       const carOptions = document.querySelectorAll('#car-options .car-option');
 
       carOptions.forEach(car => {
-        // Расчет стоимости поездки в рублях с округлением до 10 рублей
-        totalPrice = Math.round((routeFields.distance * car.getAttribute('data-price-per-km')) / 10) * 10;
+        // Расчет стоимости поездки в рублях с округлением до 500 рублей
+        totalPrice = Math.round((routeFields.distance * car.getAttribute('data-price-per-km')) / 500) * 500;
+        totalPrice == 0 ? totalPrice = 500 : totalPrice = totalPrice;
         car.querySelector('.car-option-order-price span').innerHTML = totalPrice;
         car.querySelector('.car-option-order-points').innerHTML = `${routeFields.departure} → ${routeFields.destination}`;
       });
@@ -630,21 +675,32 @@
 
     const mailPath = '<?php echo get_template_directory_uri(); ?>/calc-transfer/mail.php'
     document.querySelector('.uniForm').addEventListener('submit', function(e) {
-      e.preventDefault();
+      // e.preventDefault();
       let th = this,
         params = new FormData(this),
-        request = new XMLHttpRequest()
+        request = new XMLHttpRequest();
+      const submitButton = th.querySelector('input[type="submit"]');
+      // Отключаем кнопку отправки, чтобы предотвратить повторные нажатия
+      if (submitButton.disabled) {
+        e.preventDefault();
+        return;
+      }
+      submitButton.disabled = true;
+
       request.open('POST', mailPath, true)
       request.send(params)
       request.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-          setTimeout(function() {
-            th.reset()
-          }, 1000)
-          alert('Спасибо, ваша заявка отправлена!')
+          th.reset();
+          if (payWay !== 'payCard') {
+            alert('Спасибо, ваша заявка отправлена!');
+          }
         }
       }
-      e.preventDefault()
+      e.preventDefault();
+      if (payWay == 'payCard') {
+        alert('Отправляем на страницу оплаты');
+      }
     })
   });
 </script>
